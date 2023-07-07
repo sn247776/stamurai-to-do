@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html className='container m-auto bg-sky-500'>
+    <html>
       <body className={inter.className}>{children}</body>
     </html>
   )

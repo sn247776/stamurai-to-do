@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { MdDelete } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
+import { IoMdAdd } from 'react-icons/io'
 
 interface Todo {
   id: number;
@@ -99,79 +100,97 @@ const TodoList = () => {
 
   return (
     <div>
-      <div>
-        <div className='my-2'>
-          <input
-            className='p-3 text-xl border-2 border-yellow-500 focus:outline-green-500 rounded'
-            style={{ width: "350px" }}
-            placeholder='Please Enter Your Text'
-            type="text"
-            value={inputText}
-            onChange={e => setInputText(e.target.value)}
-          />
-        </div>
-        <div>
-          <textarea
-            className='p-3 text-xl border-2 border-yellow-500 focus:outline-green-500 rounded'
-            placeholder='Please Enter Description'
-            style={{ width: "350px" }}
-            rows={5}
-            value={inputDescription}
-            onChange={e => setInputDescription(e.target.value)}
-          ></textarea>
-        </div>
+      <div className='bg-primary-dark 
+      flex flex-col 
+      items-center 
+      p-10 relative'>
 
-        <div>
+        <input
+          className=' text-boxs
+           p-3 text-xl border-b-2
+           border-white text-white 
+           focus:outline-0 
+           bg-transparent my-2'
 
-          <select
-            className='p-3 text-xl border-2 border-yellow-500 focus:outline-green-500 rounded'
-            value={taskFilter}
-            onChange={e => setTaskFilter(e.target.value as TaskFilter)}
-          >
-            {Object.values(TaskFilter).map(filter => (
-              <option key={filter} value={filter}>{filter}</option>
-            ))}
-          </select>
-          <button className='bg-yellow-500 mx-2 p-3 rounded-sm' onClick={addTodo}>{editTodo ? 'Save' : 'Add Todo'}</button>
-        </div>
+          placeholder='Title'
+          type="text"
+          value={inputText}
+          onChange={e => setInputText(e.target.value)}
+        />
+
+        <textarea
+          className='text-boxs
+           p-3 text-xl border-b-2
+           border-white
+            text-white 
+            focus:outline-0 
+            bg-transparent my-2'
+
+          placeholder='Description'
+          rows={5}
+          value={inputDescription}
+          onChange={e => setInputDescription(e.target.value)}
+        ></textarea>
+
+        <button
+          className='add-btn bg-rose-600 text-3xl text-white p-3 rounded-full'
+          onClick={addTodo}>{editTodo ? 'Save' : <IoMdAdd />}
+        </button>
+
       </div>
 
 
+      <div 
+      className='flex flex-col items-center my-10' 
+      style={{ maxHeight: "50vh", overflow: "auto", padding: "10px" }}>
 
-<div style={{display:"flex", flexDirection:"column", alignItems:"center", margin:"10px 0"}}>
-<div style={{ maxHeight: "50vh", overflow: "auto", padding:"10px" }}>
         {filterTodos().map(todo => (
-          <div key={todo.id} className='bg-yellow-500 p-2 m-2 flex items-center gap-2 justify-between' style={{width:"350px"}}>
-            <input
-            className='w-8 h-8'
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => toggleComplete(todo.id)}
-            />
-            <div>
-              <h3 style={{ fontSize: "25px", fontWeight: "600", textDecoration: todo.completed ? 'line-through' : 'none' }}>
+          <div key={todo.id} 
+          className=' text-boxs p-2 m-2 shadow-2xl' >
+
+            <div className='flex justify-between items-center'>
+              <input
+                className='w-6 h-6'
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => toggleComplete(todo.id)}
+              />
+
+              <h3 style={{ 
+                fontSize: "25px", fontWeight: "600",
+                color: todo.completed ? 'gray' : 'black',
+                textDecoration: todo.completed ? 'line-through' : 'none'
+                }}>
                 {todo.text}
               </h3>
-              <p style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>{todo.description}</p>
-            </div>
-            <div>
-              <button className='text-4xl'
+              <div>
+              <button className='text-3xl'
+              style={{color: todo.completed ? 'gray' : 'black',}}
                 onClick={() => deleteTodo(todo.id)}
               >
                 <MdDelete />
               </button>
               <button
-                className='text-4xl'
+              style={{color: todo.completed ? 'gray' : 'black',}}
+                className='text-3xl'
                 onClick={() => editTodoItem(todo)}
               >
                 <FaEdit />
               </button>
+              </div>
+            </div>
+            <div>
+
+              <p style={{ 
+                color: todo.completed ? 'gray' : 'black',
+                textDecoration: todo.completed ? 'line-through' : 'none' 
+                }}>{todo.description}</p>
+
             </div>
           </div>
         ))}
       </div>
-</div>
-    </div>
+      </div>
   );
 };
 
