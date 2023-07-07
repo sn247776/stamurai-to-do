@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { MdDelete } from 'react-icons/md'
-import { FaEdit } from 'react-icons/fa'
-import { IoMdAdd } from 'react-icons/io'
+import { FaSave } from 'react-icons/fa';
+import { IoMdAdd } from 'react-icons/io';
+import TodoItem  from './TodoItem';
 
-interface Todo {
+export interface Todo {
   id: number;
   text: string;
   description: string;
@@ -25,7 +25,6 @@ const TodoList = () => {
   const [taskFilter, setTaskFilter] = useState<TaskFilter>(TaskFilter.All);
 
   useEffect(() => {
-
     const storedTodos = localStorage.getItem('todos');
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
@@ -33,7 +32,6 @@ const TodoList = () => {
   }, []);
 
   useEffect(() => {
-
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
@@ -100,97 +98,81 @@ const TodoList = () => {
 
   return (
     <div>
-      <div className='bg-primary-dark 
+      <div className='
+      bg-primary-dark 
       flex flex-col 
-      items-center 
-      p-10 relative'>
-
+      items-center p-10 relative'>
         <input
-          className=' text-boxs
-           p-3 text-xl border-b-2
-           border-white text-white 
-           focus:outline-0 
+          className='
+          text-boxs p-3 text-xl 
+          border-b-2 border-white
+           text-white focus:outline-0 
            bg-transparent my-2'
-
           placeholder='Title'
-          type="text"
+          type='text'
           value={inputText}
           onChange={e => setInputText(e.target.value)}
         />
 
         <textarea
-          className='text-boxs
-           p-3 text-xl border-b-2
-           border-white
-            text-white 
-            focus:outline-0 
-            bg-transparent my-2'
-
+          className='text-boxs p-3 
+          text-xl border-b-2 
+          border-white text-white
+           focus:outline-0 bg-transparent my-2'
           placeholder='Description'
           rows={5}
           value={inputDescription}
           onChange={e => setInputDescription(e.target.value)}
         ></textarea>
 
-        <button
-          className='add-btn bg-rose-600 text-3xl text-white p-3 rounded-full'
-          onClick={addTodo}>{editTodo ? 'Save' : <IoMdAdd />}
-        </button>
+        <div className='drop-btn'>
+          <select
+            className='
+            border-2 
+            border-rose-600 
+            outline-none p-2 text-m'
+            value={taskFilter}
+            onChange={e => setTaskFilter(e.target.value as TaskFilter)}
+          >
+            {Object.values(TaskFilter).map(filter => (
+              <option key={filter} value={filter}>
+                {filter}
+              </option>
+            ))}
+          </select>
 
+          <button
+            className='
+            bg-rose-600 text-3xl 
+            text-white p-3 rounded-full'
+            onClick={addTodo}
+          >
+            {editTodo ? <FaSave /> : <IoMdAdd />}
+          </button>
+        </div>
       </div>
 
-
-      <div 
-      className='flex flex-col items-center my-10' 
-      style={{ maxHeight: "50vh", overflow: "auto", padding: "10px" }}>
-
-        {filterTodos().map(todo => (
-          <div key={todo.id} 
-          className=' text-boxs p-2 m-2 shadow-2xl' >
-
-            <div className='flex justify-between items-center'>
-              <input
-                className='w-6 h-6'
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => toggleComplete(todo.id)}
-              />
-
-              <h3 style={{ 
-                fontSize: "25px", fontWeight: "600",
-                color: todo.completed ? 'gray' : 'black',
-                textDecoration: todo.completed ? 'line-through' : 'none'
-                }}>
-                {todo.text}
-              </h3>
-              <div>
-              <button className='text-3xl'
-              style={{color: todo.completed ? 'gray' : 'black',}}
-                onClick={() => deleteTodo(todo.id)}
-              >
-                <MdDelete />
-              </button>
-              <button
-              style={{color: todo.completed ? 'gray' : 'black',}}
-                className='text-3xl'
-                onClick={() => editTodoItem(todo)}
-              >
-                <FaEdit />
-              </button>
-              </div>
-            </div>
-            <div>
-
-              <p style={{ 
-                color: todo.completed ? 'gray' : 'black',
-                textDecoration: todo.completed ? 'line-through' : 'none' 
-                }}>{todo.description}</p>
-
-            </div>
-          </div>
-        ))}
+      <div
+        className='
+        flex flex-col 
+        items-center my-10'
+        style={{ maxHeight: '50vh', overflow: 'auto', padding: '10px' }}
+      >
+        {filterTodos().length === 0 ? (
+          <h1 className='text-3xl font-semibold'>No task found</h1>
+        ) : (
+          filterTodos().map(todo => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              toggleComplete={toggleComplete}
+              editTodoItem={editTodoItem}
+              deleteTodo={deleteTodo}
+            />
+          ))
+        )}
       </div>
-      </div>
+    </div>
   );
 };
 
