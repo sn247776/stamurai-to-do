@@ -1,7 +1,7 @@
 # OutPut Images
-
-<img src="./output.png" alt="output"/>
 <img src="./Gif.gif" alt="output"/>
+<img src="./output.png" alt="output"/>
+
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
